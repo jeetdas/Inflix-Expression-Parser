@@ -160,13 +160,20 @@ string reduceExpression(string str)
     return proccessedString;
 }
 
+/*
+ 
+ If a new operator is added, push to numbers stack
+ else pop last, *10 + new number, then push back
+ 
+ */
+
 double processedAnswer(string expn)
 {
     double answer = 0.0;
     char *tempPtr;
     char temp;
     int temp2;
-    bool isNumber;
+    bool addToNumberStack = true;
 
     stack<int> numbersStack;
     stack<char> operatorsStack;
@@ -177,25 +184,25 @@ double processedAnswer(string expn)
         if (!(isdigit(*it)))
         {
             operatorsStack.push(*it);
-            isNumber = true;
+            addToNumberStack = false;
         }
         else
         {
             tempPtr = (&(*it));
             temp = tempPtr[0];
-            if (isNumber)
+            temp2 = temp - '0'; // ASCII to regular character
+            
+            if (addToNumberStack)
             {
-                numbersStack.push(temp - '0'); // ASCII to regular character
+                temp2 = (numbersStack.top() * 10) + (temp2);
+                numbersStack.pop();
+                numbersStack.push(temp2);
             }
             else
             {
-                temp2 = numbersStack.top();
-                cout << "TE = " << temp2 << endl;
-                numbersStack.pop();
-                temp2 = (temp2 * 10) + (temp - '0');
                 numbersStack.push(temp2);
-                isNumber = !isNumber;
             }
+            addToNumberStack = true;
         }
     }
     
