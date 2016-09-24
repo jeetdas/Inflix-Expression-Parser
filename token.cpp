@@ -3,123 +3,180 @@
 #include <stack>
 using namesspace std; 
 
-int evaluateOp(char theOperator,int numberStack, char operatorStack)
+int evaluateOp(stack <int> numberStack, stack <char> operatorStack)
 {
-	int leftValue = numberStack.pop();
-	int rightValue = numberStack.pop();
+	int leftValue, rightValue;
+	char theOperator = operatorStack.top();
+
 	int result;
-	switch(theOperator)
+	switch (theOperator)
 	{
-<<<<<<< Updated upstream
-		case '+'://adds the two number and returns the value
-			result = leftValue + rightValue;
-			return result;
-			break;
-		case '-'://subtracts the two number and returns the value
-			result = leftValue - rightValue;
-			return result;
-			break;
-		case '/'://divides the two number and returns the value
-			result = leftValue / rightValue;
-			return result;
-			break;
-		case '*'://multiplies the two number and returns the value
-			result = leftValue * rightValue;
-			return result;
-			break;
-		case'^'://exponent
-			result = pow(leftValue, rightValue);
-			return result;
-			break;
-		case'%'://mod operator
-			result = leftValue % rightValue;
-			return result;
-			break;
-		case'!'://logical not
-			result = 0; //false
-			return result;
-			break;
-		case'A'://increments the left value by one ++
-			leftValue++;
-			return leftValue;
-			break;
-		case'B'://decrements the left value by one --
-			leftValue--;
-			return leftValue;
-			break;
-		case'C'://checks to see if two values are equal ==
-			if (leftValue == rightValue)//if they're equal return 1 for true
-			{
-				result = 1;//true
-				return result;
-			}
-			else//else return 0 for false
-			{
-				result = 0;//false
-				return result;
-			}
-			break;
-		case'D'://checks to see if left value is not equal to right value !=
-			if (leftValue != rightValue)//returns true(1) if they are not equal
-			{
-				result = 1;//true
-				return result;
-			}
-			else//if they are equal returns false(0)
-			{
-				result = 0;//false
-				return result;
-			}
-			break;
-		case'E'://logical and operator &&
-			break;
-		case'F'://logical or operator ||
-			result = 1;//true
-			return result;
-			break;
-		case'G'://greater than or equal
-			if (leftValue >= rightValue)
-			{
-				result = 1;//true
-				return result;
-			}
-			else
-			{
-				result = 0;//false
-				return result;
-			}
-			break;
-		case'H'://less than or equal
-			if (leftValue <= rightValue)
-
-			{
-				result = 1;//true
-				return result;
-			}
-			else
-			{
-				result = 0;//false
-				return result;
-			}
-			break;
-		case'I'://negative
-			result = leftValue * -1;
-			return result;
-			break;
-			
-
-				
-=======
-		case '+':
+	case '+'://adds the two number and returns the value
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
 		result = leftValue + rightValue;
 		return result;
-		break; 
-		case '-':
+	case '-'://subtracts the two number and returns the value
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
 		result = leftValue - rightValue;
 		return result;
-		break;
->>>>>>> Stashed changes
+	case '/'://divides the two number and returns the value
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = leftValue / rightValue;
+		return result;
+	case '*'://multiplies the two number and returns the value
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = leftValue * rightValue;
+		return result;
+	case'^'://exponent
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = pow(leftValue, rightValue);
+		return result;
+	case'%'://mod operator
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = leftValue % rightValue;
+		return result;
+	case'!'://logical not
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = 0; //false
+		return result;
+	case'A'://increments the left value by one ++
+		leftValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		leftValue++;
+		return leftValue;
+	case'B'://decrements the left value by one --
+		leftValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		leftValue--;
+		return leftValue;
+	case'C'://checks to see if two values are equal ==
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		if (leftValue == rightValue)//if they're equal return 1 for true
+		{
+			result = 1;//true
+			return result;
+		}
+		else//else return 0 for false
+		{
+			result = 0;//false
+			return result;
+		}
+	case'D'://checks to see if left value is not equal to right value !=
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		if (leftValue != rightValue)//returns true(1) if they are not equal
+		{
+			result = 1;//true
+			return result;
+		}
+		else//if they are equal returns false(0)
+		{
+			result = 0;//false
+			return result;
+		}
+	case'E'://logical and operator &&
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		if (leftValue == rightValue)//if they're equal return 1 for true
+		{
+			result = 1;//true
+			return result;
+		}
+		else//else return 0 for false
+		{
+			result = 0;//false
+			return result;
+		}
+	case'F'://logical or operator ||
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = 1;//true
+		return result;
+	case'G'://greater than or equal
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		if (leftValue >= rightValue)
+		{
+			result = 1;//true
+			return result;
+		}
+		else
+		{
+			result = 0;//false
+			return result;
+		}
+	case'H'://less than or equal
+		leftValue = numberStack.top();
+		numberStack.pop();
+		rightValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		if (leftValue <= rightValue)
 
+		{
+			result = 1;//true
+			return result;
+		}
+		else
+		{
+			result = 0;//false
+			return result;
+		}
+	case'I'://negative
+		leftValue = numberStack.top();
+		numberStack.pop();
+		operatorStack.pop();
+		result = leftValue * -1;
+		return result;
+
+	default:
+		break;
 	}
 }
 
@@ -136,6 +193,7 @@ istringstream tokens();
 char nextChar;
 stack<int> numberStack;
 stack<char> operatorStack;
+
 
 while (tokens >> nextChar){
 	if (isdigit(nextChar)){
