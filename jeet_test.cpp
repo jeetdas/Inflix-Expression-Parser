@@ -4,6 +4,7 @@
 #include <iterator>
 #include <cctype>
 #include <cstddef>
+#include <stack>
 
 using namespace std;
 
@@ -154,7 +155,63 @@ string reduceExpression(string str)
         }
     }
     
+    cout << proccessedString << endl;
+    
     return proccessedString;
+}
+
+double processedAnswer(string expn)
+{
+    double answer = 0.0;
+    char *tempPtr;
+    char temp;
+    int temp2;
+    bool isNumber;
+
+    stack<int> numbersStack;
+    stack<char> operatorsStack;
+    
+    string::iterator it;
+    for (it = expn.begin(); it < expn.end(); ++it)
+    {
+        if (!(isdigit(*it)))
+        {
+            operatorsStack.push(*it);
+            isNumber = true;
+        }
+        else
+        {
+            tempPtr = (&(*it));
+            temp = tempPtr[0];
+            if (isNumber)
+            {
+                numbersStack.push(temp - '0'); // ASCII to regular character
+            }
+            else
+            {
+                temp2 = numbersStack.top();
+                cout << "TE = " << temp2 << endl;
+                numbersStack.pop();
+                temp2 = (temp2 * 10) + (temp - '0');
+                numbersStack.push(temp2);
+                isNumber = !isNumber;
+            }
+        }
+    }
+    
+    while (!operatorsStack.empty())
+    {
+        cout << "Operator = " << operatorsStack.top() << endl;
+        operatorsStack.pop();
+    }
+    
+    while (!numbersStack.empty())
+    {
+        cout << "Number = " << numbersStack.top() << endl;
+        numbersStack.pop();
+    }
+    
+    return answer;
 }
 
 int main()
@@ -163,14 +220,16 @@ int main()
     cout << "Enter inflix expression: ";
     //getline(cin, expn);
     
-    //expn = "++++2-5*(3^2)";
-    expn = "(4>=4) && 0";
+    //expn = "++++20-5*(30^2)";
+    expn = "(40>=4) && 0";
     cout << "EXPN = " << expn << endl;
     
     expn = removeSpaces(expn);
     expn = makeItLowerCase(expn);
     
-    cout << reduceExpression(expn) << endl;
+    expn = reduceExpression(expn);
+    
+    processedAnswer(expn);
     
     return 0;
 }
