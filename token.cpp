@@ -10,6 +10,7 @@ int evaluateOp(char theOperator,int numberStack, char operatorStack)
 	int result;
 	switch(theOperator)
 	{
+<<<<<<< Updated upstream
 		case '+'://adds the two number and returns the value
 			result = leftValue + rightValue;
 			return result;
@@ -108,6 +109,16 @@ int evaluateOp(char theOperator,int numberStack, char operatorStack)
 			
 
 				
+=======
+		case '+':
+		result = leftValue + rightValue;
+		return result;
+		break; 
+		case '-':
+		result = leftValue - rightValue;
+		return result;
+		break;
+>>>>>>> Stashed changes
 
 	}
 }
@@ -144,8 +155,66 @@ while (tokens >> nextChar){
 		{
 			
 		}
+	} //errors 
+	
 	}
-	else{
-		throw caseErrors(" ");
+} 
+
+
+
+
+// Errors 
+/*try 
+{
+	if (/*missing parenthese)
+	{
+		throw 0;
 	}
+	else if (/* starts with < )
+	{
+		throw 1;
+	}
+	else if (/* two binary operation)
+	{
+		throw 2;
+	}
+	else if (/* two operands in a row)
+	{
+		throw 3;
+	}
+	else if (/* unary operand can't be followed)
+	{
+		throw 4;
+	}
+	else (/*division by 0)
+	{
+		throw 5;
+	}
+
 }
+
+catch(int x)
+{
+	cout << "Expression can't start with a closing parenthesis @ char: 0" << endl;
+}
+catch(int x)
+{
+	cout << "Expression can't start with a binary operator @ char: 0" << endl;
+}
+catch(int x)
+{
+	cout << "Two binary operators in a row @ row char 3" << endl;
+}
+catch(int x)
+{
+	cout << "Two operands in a row @ char 5" << endl;
+}
+catch(int x)
+{
+	cout << "A unary operand can't be followed by a binary operator @ char 6" << endl;
+}
+catch(int x)
+{
+	cout << "division by zero @ char 2" << endl;
+}
+}*/
