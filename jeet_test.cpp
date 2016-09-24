@@ -37,7 +37,7 @@ bool isoperator(char op)
     size_t found = OPERATORS.find_first_of(op);
     if (found == string::npos)
     {
-        cout << "FALSE" << endl;
+        cout << " FALSE" << endl;
         return false;
     }
     cout << "TRUE" << endl;
@@ -82,91 +82,90 @@ int precedenceOfOperator(char op)
 string reduceExpression(string str)
 {
     string proccessedString = "";
-    char previous = NULL;
-    char current = NULL;
+    char temp;
     
     string::iterator it;
     for (it = str.begin(); it < str.end(); ++it)
     {
-        if (!(isdigit(*it)))
-        {
-            current = *it;
-            cout << "Current = " << current << endl;
-        }
-        if (previous == current)
-        {
-            switch (current)
-            {
-                case '+':
-                    proccessedString += PLUS;
-                    previous = 'z';
-                    break;
-                case '-':
-                    proccessedString += MINUS;
-                    previous = 'z';
-                    break;
-                case '&':
-                    proccessedString += LOGICALAND;
-                    previous = 'z';
-                    break;
-                case '|':
-                    proccessedString += LOGICALOR;
-                    previous = 'z';
-                    break;
-                case '=':
-                    proccessedString += EQUAL;
-                    previous = 'z';
-                    break;
-            }
-        }
-        else
-        {
-            if (previous == NULL && current == '-')
-            {
-                proccessedString += NEGATIVE;
-                previous = 'z';
-            }
-            else if (isoperator(previous) && current == '-')
-            {
-                proccessedString += NEGATIVE;
-                previous = 'z';
-            }
-            else if (previous == '>' && current == '=')
-            {
-                proccessedString += GREATEREQUAL;
-                previous = 'z';
-            }
-            else if (previous == '<' && current == '=')
-            {
-                proccessedString += LESSEQUAL;
-                previous = 'z';
-            }
-            else if (previous == '!' && current == '=')
-            {
-                proccessedString += NOTEQUAL;
-                previous = 'z';
-            }
-            else
-            {
-                //proccessedString += *it;
-                //previous = *it;
-            }
-        }
         if (isdigit(*it))
         {
             proccessedString += *it;
         }
+        else
+        {
+            temp = *(++it);
+            //cout << "T = " << temp << endl;
+            --it;
+            if (!(isdigit(temp)))
+            {
+                if (temp == *it)
+                {
+                    switch (temp)
+                    {
+                        case '+':
+                            proccessedString += PLUS;
+                            ++it;
+                            break;
+                        case '-':
+                            proccessedString += MINUS;
+                            ++it;
+                            break;
+                        case '&':
+                            proccessedString += LOGICALAND;
+                            ++it;
+                            break;
+                        case '|':
+                            proccessedString += LOGICALOR;
+                            ++it;
+                            break;
+                        case '=':
+                            proccessedString += EQUAL;
+                            ++it;
+                            break;
+                    }
+                }
+                else if (temp == '=')
+                {
+                    switch (*it)
+                    {
+                        case '>':
+                            proccessedString += GREATEREQUAL;
+                            ++it;
+                            break;
+                        case '<':
+                            proccessedString += LESSEQUAL;
+                            ++it;
+                            break;
+                        case '!':
+                            proccessedString += NOTEQUAL;
+                            ++it;
+                            break;
+                    }
+                }
+                else
+                {
+                    proccessedString += *it;
+                }
+            }
+            else
+            {
+                proccessedString += *it;
+            }
+        }
     }
-    cout << proccessedString << endl;
     
-    return "lalal";
+    return proccessedString;
 }
 
 int main()
 {
     string expn;
     cout << "Enter inflix expression: ";
-    getline(cin, expn);
+    //getline(cin, expn);
+    
+    //expn = "++++2-5*(3^2)";
+    expn = "(4>=4) && 0";
+    cout << "EXPN = " << expn << endl;
     
     expn = removeSpaces(expn);
     expn = makeItLowerCase(expn);
