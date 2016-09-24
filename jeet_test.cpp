@@ -19,18 +19,20 @@ const char NEGATIVE = 'I'; // -2
 
 const string OPERATORS = "+-*/()ABCDEFGHI!%><";
 
+//removes white space from line 
 string removeSpaces(string str)
 {
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
     return str;
 }
 
+//converts the all the upper cases from the operator converter to lower case
 string makeItLowerCase(string str)
 {
     transform(str.begin(), str.end(), str.begin(), ::tolower);
     return str;
 }
-
+//checks to see if it is operator 
 bool isoperator(char op)
 {
     cout << "OP = " << op;
@@ -43,7 +45,7 @@ bool isoperator(char op)
     cout << "TRUE" << endl;
     return true;
 }
-
+//gives the precedence to the operator for evalation 
 int precedenceOfOperator(char op)
 {
     switch (op)
@@ -79,6 +81,7 @@ int precedenceOfOperator(char op)
     }
 }
 
+// converts the operators to letters to be used for evaluation 
 string reduceExpression(string str)
 {
     string proccessedString = "";
