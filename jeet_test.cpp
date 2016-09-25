@@ -138,7 +138,7 @@ string reduceExpression(string str)
     return proccessedString;
 }
 
-int calculate(int number1, char op, int number2 = -1)
+double calculate(double number1, char op, double number2 = -1)
 {
     // Order
     // number1 op number2
@@ -159,7 +159,7 @@ int calculate(int number1, char op, int number2 = -1)
             case '/':
                 return number1/number2;
             case '%':
-                return number1 % number2;
+                return int(number1) % int(number2);
             case '+':
                 return number1 + number2;
             case '-':
@@ -190,10 +190,10 @@ double processedAnswer(string expn)
     double answer = 0.0;
     char *tempPtr;
     char temp;
-    int temp2, n1, n2;
+    double temp2, n1, n2;
     bool addToNumberStack = true;
 
-    stack<int> numbersStack;
+    stack<double> numbersStack;
     stack<char> operatorsStack;
     
     string::iterator it;
