@@ -5,6 +5,7 @@
 #include <cctype>
 #include <cstddef>
 #include <stack>
+#include <math>
 
 using namespace std;
 
@@ -160,12 +161,50 @@ string reduceExpression(string str)
     return proccessedString;
 }
 
-/*
- 
- If a new operator is added, push to numbers stack
- else pop last, *10 + new number, then push back
- 
- */
+int calculate(int number1, char op, int number2 = -1)
+{
+    // Order
+    // number1 op number2
+    switch(op)
+    {
+            case '!':
+                return !number1;
+            case PLUS:
+                return number1 + 1;
+            case MINUS:
+                return number1 - 1;
+            case NEGATIVE:
+                return -1 * number1;
+            case '^':
+                return pow(number1, number2);
+            case '*':
+                return number1 * number2;
+            case '/':
+                return number1/number2;
+            case '%':
+                return number1 % number2;
+            case '+':
+                return number1 + number2;
+            case '-':
+                return number1 - number2;
+            case '>':
+                return int(number1 > number2);
+            case GREATEREQUAL:
+                return int(number1 >= number2);
+            case '<':
+                return int(number1 < number2);
+            case LESSEQUAL:
+                return int(number1 <= number2);
+            case EQUAL:
+                return int(number1 == number2);
+            case NOTEQUAL:
+                return int(number1 != number2);
+            case LOGICALAND:
+                return int(number1 && number2);
+            case LOGICALOR:
+                return int(number1 || number2);
+    }
+}
 
 double processedAnswer(string expn)
 {
@@ -194,7 +233,7 @@ double processedAnswer(string expn)
             
             if (addToNumberStack)
             {
-                temp2 = (numbersStack.top() * 10) + (temp2);
+                temp2 = (numbersStack.top() * 10) + (temp2); // Multiple digit number
                 numbersStack.pop();
                 numbersStack.push(temp2);
             }
@@ -228,7 +267,8 @@ int main()
     //getline(cin, expn);
     
     //expn = "++++20-5*(30^2)";
-    expn = "(40>=4) && 0";
+    expn = "(0400>=4) && 0";
+    //expn = "3&&&&5";
     cout << "EXPN = " << expn << endl;
     
     expn = removeSpaces(expn);
