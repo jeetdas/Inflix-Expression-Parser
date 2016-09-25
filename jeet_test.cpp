@@ -1,11 +1,7 @@
-#include <algorithm>
-#include <string>
 #include <iostream>
 #include <iterator>
-#include <cctype>
-#include <cstddef>
 #include <stack>
-#include <math>
+#include <cmath>
 
 using namespace std;
 
@@ -25,25 +21,6 @@ string removeSpaces(string str)
 {
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
     return str;
-}
-
-string makeItLowerCase(string str)
-{
-    transform(str.begin(), str.end(), str.begin(), ::tolower);
-    return str;
-}
-
-bool isoperator(char op)
-{
-    cout << "OP = " << op;
-    size_t found = OPERATORS.find_first_of(op);
-    if (found == string::npos)
-    {
-        cout << " FALSE" << endl;
-        return false;
-    }
-    cout << "TRUE" << endl;
-    return true;
 }
 
 int precedenceOfOperator(char op)
@@ -156,7 +133,7 @@ string reduceExpression(string str)
         }
     }
     
-    cout << proccessedString << endl;
+    proccessedString = "(" + proccessedString + ")";
     
     return proccessedString;
 }
@@ -203,6 +180,8 @@ int calculate(int number1, char op, int number2 = -1)
                 return int(number1 && number2);
             case LOGICALOR:
                 return int(number1 || number2);
+            default:
+                return 0;
     }
 }
 
@@ -211,7 +190,7 @@ double processedAnswer(string expn)
     double answer = 0.0;
     char *tempPtr;
     char temp;
-    int temp2;
+    int temp2, n1, n2;
     bool addToNumberStack = true;
 
     stack<int> numbersStack;
@@ -222,7 +201,66 @@ double processedAnswer(string expn)
     {
         if (!(isdigit(*it)))
         {
-            operatorsStack.push(*it);
+            if (operatorsStack.empty() || (precedenceOfOperator(*it) >= precedenceOfOperator(operatorsStack.top())) || *it == '(')
+            {
+                operatorsStack.push(*it);
+            }
+            else if (*it == ')')
+            {
+                while (operatorsStack.top() != '(')
+                {
+                    n2 = numbersStack.top();
+                    numbersStack.pop();
+                    n1 = numbersStack.top();
+                    numbersStack.pop();
+                    temp2 = calculate(n1, operatorsStack.top(), n2);
+                    operatorsStack.pop();
+                    numbersStack.push(temp2);
+                }
+                operatorsStack.pop();
+            }
+            else
+            {
+                while (precedenceOfOperator(*it) < precedenceOfOperator(operatorsStack.top()))
+                {
+                    switch (operatorsStack.top())
+                    {
+                        case '!':
+                        case PLUS:
+                        case MINUS:
+                        case NEGATIVE:
+                            n1 = numbersStack.top();
+                            numbersStack.pop();
+                            temp2 = calculate(n1, operatorsStack.top());
+                            operatorsStack.pop();
+                            numbersStack.push(temp2);
+                            break;
+                        case '^':
+                        case '*':
+                        case '/':
+                        case '%':
+                        case '+':
+                        case '-':
+                        case '>':
+                        case GREATEREQUAL:
+                        case '<':
+                        case LESSEQUAL:
+                        case EQUAL:
+                        case NOTEQUAL:
+                        case LOGICALAND:
+                        case LOGICALOR:
+                            n2 = numbersStack.top();
+                            numbersStack.pop();
+                            n1 = numbersStack.top();
+                            numbersStack.pop();
+                            temp2 = calculate(n1, operatorsStack.top(), n2);
+                            operatorsStack.pop();
+                            numbersStack.push(temp2);
+                            break;
+                    }
+                }
+                operatorsStack.push(*it);
+            }
             addToNumberStack = false;
         }
         else
@@ -243,40 +281,36 @@ double processedAnswer(string expn)
             }
             addToNumberStack = true;
         }
+        
+        /*
+        
+        if (!numbersStack.empty())
+            cout << "NUM = " << numbersStack.top() << endl;
+        else
+            cout << "NUM empty" << endl;
+        if (!operatorsStack.empty())
+            cout << "OP = " << operatorsStack.top() << endl;
+        else
+            cout << "OP empty" << endl;
+        cout << (&(*it)) << endl;
+        cout << "---------------------" << endl;
+         */
     }
     
-    while (!operatorsStack.empty())
-    {
-        cout << "Operator = " << operatorsStack.top() << endl;
-        operatorsStack.pop();
-    }
-    
-    while (!numbersStack.empty())
-    {
-        cout << "Number = " << numbersStack.top() << endl;
-        numbersStack.pop();
-    }
-    
-    return answer;
+    return numbersStack.top();
 }
 
 int main()
 {
     string expn;
     cout << "Enter inflix expression: ";
-    //getline(cin, expn);
-    
-    //expn = "++++20-5*(30^2)";
-    expn = "(0400>=4) && 0";
-    //expn = "3&&&&5";
-    cout << "EXPN = " << expn << endl;
+    getline(cin, expn);
     
     expn = removeSpaces(expn);
-    expn = makeItLowerCase(expn);
-    
+
     expn = reduceExpression(expn);
     
-    processedAnswer(expn);
+    cout << "Answer = " << processedAnswer(expn) << endl;
     
     return 0;
 }
