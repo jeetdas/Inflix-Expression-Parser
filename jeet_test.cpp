@@ -19,6 +19,46 @@ const char NEGATIVE = 'I'; // -2
 
 bool error = false;
 
+void isBalanced(string expn)
+{
+    int open, close, openPlace = -1, closePlace = -1;
+    
+    string::iterator stringItr;
+    for (stringItr = expn.begin()+1; stringItr < expn.end() -1 ; ++stringItr)
+    {
+        if (*stringItr == '(')
+        {
+            open++;
+            if (openPlace == -1)
+            {
+                openPlace = *stringItr;
+            }
+        }
+        else if(*stringItr == ')')
+        {
+            close++;
+            if (closePlace == -1)
+            {
+                closePlace = *stringItr;
+            }
+        }
+        if (open != close)
+        {
+            if (open > close)
+            {
+                error = true;
+                throw "Mismatch parenthese in the expression @char"<<openPlace;
+            }
+            else
+            {
+                error = true;
+                throw "Mismatch parenthese in the expression @char"<<closePlace;
+            }
+
+        } 
+    }
+}
+
 string removeSpaces(string str)
 {
     string::iterator it, it_copy_prev, it_copy_next;
