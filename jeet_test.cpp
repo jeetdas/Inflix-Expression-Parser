@@ -15,11 +15,35 @@ const char GREATEREQUAL = 'G'; // >=
 const char LESSEQUAL = 'H'; // <=
 const char NEGATIVE = 'I'; // -2
 
-const string OPERATORS = "+-*/()ABCDEFGHI!%><";
+//const string OPERATORS = "+-*/()ABCDEFGHI!%><";
+
+bool error = false;
 
 string removeSpaces(string str)
 {
-    str.erase(remove(str.begin(), str.end(), ' '), str.end());
+    string::iterator it, it_copy_prev, it_copy_next;
+    int count = 1;
+    char temp;
+    for (it = str.begin(); it < str.end(); ++it, ++count)
+    {
+        if (*it == ' ')
+        {
+            it_copy_prev = it;
+            it_copy_next = it;
+            --it_copy_prev;
+            ++it_copy_next;
+            
+            if (isdigit(*(it_copy_prev)) && isdigit(*(it_copy_next)))
+            {
+                string errorMsg = "Two operands in a row @ char " + to_string(count);
+                throw errorMsg.c_str();
+            }
+            else
+            {
+                str.erase(count- 1, 1);
+            }
+        }
+    }
     return str;
 }
 
@@ -138,7 +162,7 @@ string reduceExpression(string str)
     return proccessedString;
 }
 
-int calculate(int number1, char op, int number2 = -1)
+double calculate(double number1, char op, double number2 = -1)
 {
     // Order
     // number1 op number2
@@ -157,9 +181,11 @@ int calculate(int number1, char op, int number2 = -1)
             case '*':
                 return number1 * number2;
             case '/':
+                if (number2 == 0)
+                    throw "Zero divison error";
                 return number1/number2;
             case '%':
-                return number1 % number2;
+                return int(number1) % int(number2);
             case '+':
                 return number1 + number2;
             case '-':
@@ -190,10 +216,10 @@ double processedAnswer(string expn)
     double answer = 0.0;
     char *tempPtr;
     char temp;
-    int temp2, n1, n2;
+    double temp2, n1, n2;
     bool addToNumberStack = true;
 
-    stack<int> numbersStack;
+    stack<double> numbersStack;
     stack<char> operatorsStack;
     
     string::iterator it;
@@ -213,7 +239,12 @@ double processedAnswer(string expn)
                     numbersStack.pop();
                     n1 = numbersStack.top();
                     numbersStack.pop();
-                    temp2 = calculate(n1, operatorsStack.top(), n2);
+                    try {
+                        temp2 = calculate(n1, operatorsStack.top(), n2);
+                    } catch (const char* msg) {
+                        error = true;
+                        cerr << msg << endl;
+                    }
                     operatorsStack.pop();
                     numbersStack.push(temp2);
                 }
@@ -253,7 +284,12 @@ double processedAnswer(string expn)
                             numbersStack.pop();
                             n1 = numbersStack.top();
                             numbersStack.pop();
-                            temp2 = calculate(n1, operatorsStack.top(), n2);
+                            try {
+                                temp2 = calculate(n1, operatorsStack.top(), n2);
+                            } catch (const char* msg) {
+                                error = true;
+                                cerr << msg << endl;
+                            }
                             operatorsStack.pop();
                             numbersStack.push(temp2);
                             break;
@@ -294,6 +330,7 @@ double processedAnswer(string expn)
             cout << "OP empty" << endl;
         cout << (&(*it)) << endl;
         cout << "---------------------" << endl;
+         
          */
     }
     
@@ -303,14 +340,30 @@ double processedAnswer(string expn)
 int main()
 {
     string expn;
+    double answer;
     cout << "Enter inflix expression: ";
     getline(cin, expn);
     
-    expn = removeSpaces(expn);
+    try
+    {
+        expn = removeSpaces(expn);
+    } catch (const char* eMsg)
+    {
+        error = true;
+        cerr << eMsg << endl;
+    }
+    
+    //cout << "1 = " << expn << endl;
 
     expn = reduceExpression(expn);
     
-    cout << "Answer = " << processedAnswer(expn) << endl;
+    //cout << "2 = " << expn << endl;
+    
+    if (!error)
+        answer = processedAnswer(expn);
+    
+    if (!error)
+        cout << "Answer = " << answer << endl;
     
     return 0;
 }
