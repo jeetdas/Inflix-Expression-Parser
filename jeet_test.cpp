@@ -21,7 +21,29 @@ bool error = false;
 
 string removeSpaces(string str)
 {
-    str.erase(remove(str.begin(), str.end(), ' '), str.end());
+    string::iterator it, it_copy_prev, it_copy_next;
+    int count = 1;
+    char temp;
+    for (it = str.begin(); it < str.end(); ++it, ++count)
+    {
+        if (*it == ' ')
+        {
+            it_copy_prev = it;
+            it_copy_next = it;
+            --it_copy_prev;
+            ++it_copy_next;
+            
+            if (isdigit(*(it_copy_prev)) && isdigit(*(it_copy_next)))
+            {
+                string errorMsg = "Two operands in a row @ char " + to_string(count);
+                throw errorMsg.c_str();
+            }
+            else
+            {
+                str.erase(count- 1, 1);
+            }
+        }
+    }
     return str;
 }
 
@@ -308,6 +330,7 @@ double processedAnswer(string expn)
             cout << "OP empty" << endl;
         cout << (&(*it)) << endl;
         cout << "---------------------" << endl;
+         
          */
     }
     
@@ -321,11 +344,23 @@ int main()
     cout << "Enter inflix expression: ";
     getline(cin, expn);
     
-    expn = removeSpaces(expn);
+    try
+    {
+        expn = removeSpaces(expn);
+    } catch (const char* eMsg)
+    {
+        error = true;
+        cerr << eMsg << endl;
+    }
+    
+    //cout << "1 = " << expn << endl;
 
     expn = reduceExpression(expn);
     
-    answer = processedAnswer(expn);
+    //cout << "2 = " << expn << endl;
+    
+    if (!error)
+        answer = processedAnswer(expn);
     
     if (!error)
         cout << "Answer = " << answer << endl;
