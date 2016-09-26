@@ -15,7 +15,9 @@ const char GREATEREQUAL = 'G'; // >=
 const char LESSEQUAL = 'H'; // <=
 const char NEGATIVE = 'I'; // -2
 
-const string OPERATORS = "+-*/()ABCDEFGHI!%><";
+//const string OPERATORS = "+-*/()ABCDEFGHI!%><";
+
+bool error = false;
 
 string removeSpaces(string str)
 {
@@ -157,6 +159,8 @@ double calculate(double number1, char op, double number2 = -1)
             case '*':
                 return number1 * number2;
             case '/':
+                if (number2 == 0)
+                    throw "Zero divison error";
                 return number1/number2;
             case '%':
                 return int(number1) % int(number2);
@@ -213,7 +217,12 @@ double processedAnswer(string expn)
                     numbersStack.pop();
                     n1 = numbersStack.top();
                     numbersStack.pop();
-                    temp2 = calculate(n1, operatorsStack.top(), n2);
+                    try {
+                        temp2 = calculate(n1, operatorsStack.top(), n2);
+                    } catch (const char* msg) {
+                        error = true;
+                        cerr << msg << endl;
+                    }
                     operatorsStack.pop();
                     numbersStack.push(temp2);
                 }
@@ -253,7 +262,12 @@ double processedAnswer(string expn)
                             numbersStack.pop();
                             n1 = numbersStack.top();
                             numbersStack.pop();
-                            temp2 = calculate(n1, operatorsStack.top(), n2);
+                            try {
+                                temp2 = calculate(n1, operatorsStack.top(), n2);
+                            } catch (const char* msg) {
+                                error = true;
+                                cerr << msg << endl;
+                            }
                             operatorsStack.pop();
                             numbersStack.push(temp2);
                             break;
@@ -303,6 +317,7 @@ double processedAnswer(string expn)
 int main()
 {
     string expn;
+    double answer;
     cout << "Enter inflix expression: ";
     getline(cin, expn);
     
@@ -310,7 +325,10 @@ int main()
 
     expn = reduceExpression(expn);
     
-    cout << "Answer = " << processedAnswer(expn) << endl;
+    answer = processedAnswer(expn);
+    
+    if (!error)
+        cout << "Answer = " << answer << endl;
     
     return 0;
 }
