@@ -12,10 +12,7 @@ public:
 	infixParser(string str);
 	string getExpn();
 	void setExpn(string str);
-	void setAnswer(double ans);
 	double getAnswer();
-
-
 
 private:
 	bool error;

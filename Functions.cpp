@@ -7,18 +7,31 @@ infixParser::infixParser()
 {
 	expn = "";
 	answer = -1;
+	error = false;
 }
 infixParser::infixParser(string str)
 {
 	expn = str;
 }
-void infixParser::setAnswer(double ans)
-{
-	answer = ans;
-}
 double infixParser::getAnswer()
 {
-	return answer;
+	try
+    {
+        expn = removeSpaces(expn);
+    } catch (const char* eMsg)
+    {
+        error = true;
+        cerr << eMsg << endl;
+    }
+
+    expn = reduceExpression(expn);
+    
+    if (!error)
+        answer = processedAnswer(expn);
+    
+    if (!error)
+        return answer;
+   	return -1;
 }
 void infixParser::setExpn(string str)
 {
@@ -368,4 +381,19 @@ double infixParser::calculate(double number1, char op, double number2)
 	default:
 		return 0;
 	}
+}
+
+int main()
+{
+	infixParser ip;
+
+	string expn;
+    double answer;
+    cout << "Enter inflix expression: ";
+    getline(cin, expn);
+
+    ip.setExpn(expn);
+
+	cout << ip.getAnswer() << endl;
+	return 0;
 }
