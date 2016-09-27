@@ -44,3 +44,14 @@ private:
 	static const char NEGATIVE = 'I'; // -2
 };
 
+int main()
+{
+	infixParser ip;
+	string expn;
+	double answer;
+	cout << "Enter inflix expression: ";
+	getline(cin, expn);
+	ip.setExpn(expn);
+	cout << ip.getAnswer() << endl;
+	return 0;
+}
