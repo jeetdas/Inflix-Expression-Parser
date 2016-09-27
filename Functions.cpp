@@ -321,7 +321,7 @@ void infixParser::isBalanced(string str)
 		throw errorMsg.c_str();
 	}
 }
-double infixParser::calculate(double number1, char op, double number2 = -1)
+double infixParser::calculate(double number1, char op, double number2)
 {
 	// Order
 	// number1 op number2

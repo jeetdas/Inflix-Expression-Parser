@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <cmath>
 
 using namespace std;
 class infixParser
