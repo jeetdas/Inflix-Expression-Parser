@@ -8,10 +8,13 @@ class infixParser
 {
 public:
 	infixParser();
-	infixParser(string expn, bool error);
-	void getAnswer();
-	
-	
+	infixParser(string str);
+	string getExpn();
+	void setExpn(string str);
+	void setAnswer(double ans);
+	double getAnswer();
+
+
 
 private:
 	bool error;
@@ -22,17 +25,17 @@ private:
 	string removeSpaces(string str);
 	int precedenceOfOperator(char op);
 	string reduceExpression(string str);
-	int calculate(int number1, char op, int number2 = -1);
+	double calculate(double number1, char op, double number2 = -1);
 	double processedAnswer(string expn);
-	void isBalcanced(string str);
-	const char PLUS = 'A'; // ++
-	const char MINUS = 'B'; // --
-	const char EQUAL = 'C'; // ==
-	const char NOTEQUAL = 'D'; // !=
-	const char LOGICALAND = 'E'; // &&
-	const char LOGICALOR = 'F'; // ||
-	const char GREATEREQUAL = 'G'; // >=
-	const char LESSEQUAL = 'H'; // <=
-	const char NEGATIVE = 'I'; // -2
+	void isBalanced(string str);
+	static const char PLUS = 'A'; // ++
+	static const char MINUS = 'B'; // --
+	static const char EQUAL = 'C'; // ==
+	static const char NOTEQUAL = 'D'; // !=
+	static const char LOGICALAND = 'E'; // &&
+	static const char LOGICALOR = 'F'; // ||
+	static const char GREATEREQUAL = 'G'; // >=
+	static const char LESSEQUAL = 'H'; // <=
+	static const char NEGATIVE = 'I'; // -2
 };
 
