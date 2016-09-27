@@ -7,6 +7,7 @@ infixParser::infixParser()
 {
 	expn = "";
 	answer = -1;
+	error = false;
 }
 infixParser::infixParser(string str)
 {
@@ -18,7 +19,21 @@ void infixParser::setAnswer(double ans)
 }
 double infixParser::getAnswer()
 {
-	return answer;
+	try
+	{
+		expn = removeSpaces(expn);
+	}
+	catch (const char* eMsg)
+	{
+		error = true;
+		cerr << eMsg << endl;
+	}
+	expn = reduceExpression(expn);
+	if (!error)
+		answer = processedAnswer(expn);
+	if (!error)
+		return answer;
+	return -1;
 }
 void infixParser::setExpn(string str)
 {
@@ -367,5 +382,75 @@ double infixParser::calculate(double number1, char op, double number2 = -1)
 		return int(number1 || number2);
 	default:
 		return 0;
+	}
+}
+bool infixParser::isBinaryOperator(char op)
+{
+	switch (op) {
+	case '^':
+	case '*':
+	case '/':
+	case '%':
+	case '+':
+	case '-':
+	case '>':
+	case '<':
+	case GREATEREQUAL:
+	case LESSEQUAL:
+	case EQUAL:
+	case NOTEQUAL:
+	case LOGICALAND:
+	case LOGICALOR:
+		return true;
+	default:
+		return false;
+	}
+}
+bool infixParser::isUnaryOperator(char op)
+{
+	switch (op) {
+	case '!':
+	case PLUS:
+	case MINUS:
+	case NEGATIVE:
+		return true;
+	default:
+		return false;
+	}
+}
+void infixParser::properNumberOfArgs(string expn)
+{
+	// Binary operators without two arguments
+	// Check if before is number
+	// Check if after is number
+	string::iterator it, it_prev, it_next;
+	string errorMsg;
+	int count = 1;
+	for (it = expn.begin(); it < expn.end(); ++it, ++count)
+	{
+		if (isBinaryOperator((&(*it))[0]))
+		{
+			it_prev = it;
+			it_next = it;
+			--it_prev;
+			++it_next;
+			if ((!isdigit(*it_prev)) || (!isdigit(*it_next)))
+			{
+				error = true;
+				errorMsg = "Binary operator with improper arguments @ char " + to_string(count);
+				throw errorMsg.c_str();
+			}
+		}
+		else if (isUnaryOperator((&(*it))[0]))
+		{
+			it_next = it;
+			++it_next;
+			if (!isdigit(*it_next))
+			{
+				error = true;
+				errorMsg = "Unary operator with improper arguments @ char " + to_string(count);
+				throw errorMsg.c_str();
+			}
+		}
 	}
 }
