@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <stack>
+#include <cmath>
+
 
 using namespace std;
 class infixParser
@@ -28,6 +30,9 @@ private:
 	double calculate(double number1, char op, double number2 = -1);
 	double processedAnswer(string expn);
 	void isBalanced(string str);
+	bool isBinaryOperator(char op);
+	bool isUnaryOperator(char op);
+	void properNumberOfArgs(string expn);
 	static const char PLUS = 'A'; // ++
 	static const char MINUS = 'B'; // --
 	static const char EQUAL = 'C'; // ==
