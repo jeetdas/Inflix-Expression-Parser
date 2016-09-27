@@ -19,6 +19,42 @@ const char NEGATIVE = 'I'; // -2
 
 bool error = false;
 
+bool isUnaryOperator(char op)
+{
+    switch (op) {
+        case '!':
+        case PLUS:
+        case MINUS:
+        case NEGATIVE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool isBinaryOperator(char op)
+{
+    switch (op) {
+        case '^':
+        case '*':
+        case '/':
+        case '%':
+        case '+':
+        case '-':
+        case '>':
+        case '<':
+        case GREATEREQUAL:
+        case LESSEQUAL:
+        case EQUAL:
+        case NOTEQUAL:
+        case LOGICALAND:
+        case LOGICALOR:
+            return true;
+        default:
+            return false;
+    }
+}
+
 void isBalanced(string expn)
 {
     int open = 0, close = 0, openPlace = -1, closePlace = -1, count = 1;
@@ -50,13 +86,51 @@ void isBalanced(string expn)
         error = true;
         if (open > close)
         {
-            errorMsg = "Mismatch parenthese in the expression @char " + to_string(openPlace);
+            errorMsg = "Mismatch parenthese in the expression @ char " + to_string(openPlace);
         }
         else
         {
-            errorMsg = "Mismatch parenthese in the expression @char " + to_string(closePlace);
+            errorMsg = "Mismatch parenthese in the expression @ char " + to_string(closePlace);
         }
         throw errorMsg.c_str();
+    }
+}
+
+void properNumberOfArgs(string expn)
+{
+    // Binary operators without two arguments
+    // Check if before is number
+    // Check if after is number
+    
+    string::iterator it, it_prev, it_next;
+    string errorMsg;
+    int count = 1;
+    for (it = expn.begin(); it < expn.end(); ++it, ++count)
+    {
+        if (isBinaryOperator((&(*it))[0]))
+        {
+            it_prev = it;
+            it_next = it;
+            --it_prev;
+            ++it_next;
+            if ((!isdigit(*it_prev)) || (!isdigit(*it_next)))
+            {
+                error = true;
+                errorMsg = "Binary operator with improper arguments @ char " + to_string(count);
+                throw errorMsg.c_str();
+            }
+        }
+        else if (isUnaryOperator((&(*it))[0]))
+        {
+            it_next = it;
+            ++it_next;
+            if (!isdigit(*it_next))
+            {
+                error = true;
+                errorMsg = "Unary operator with improper arguments @ char " + to_string(count);
+                throw errorMsg.c_str();
+            }
+        }
     }
 }
 
@@ -389,6 +463,7 @@ int main()
     {
         expn = removeSpaces(expn);
         isBalanced(expn);
+        properNumberOfArgs(expn);
     } catch (const char* eMsg)
     {
         error = true;
