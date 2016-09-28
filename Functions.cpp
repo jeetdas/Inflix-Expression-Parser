@@ -519,6 +519,6 @@ int main()
 
     ip.setExpn(expn);
 
-	cout << ip.getAnswer() << endl;
+	cout << "Answer = " << ip.getAnswer() << endl;
 	return 0;
 }
