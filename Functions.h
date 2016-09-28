@@ -5,11 +5,11 @@
 #include <cmath>
 
 using namespace std;
-class infixParser
+class inflixParser
 {
 public:
-	infixParser();
-	infixParser(string str);
+	inflixParser();
+	inflixParser(string str);
 	string getExpn();
 	void setExpn(string str);
 	double getAnswer();
@@ -20,6 +20,9 @@ private:
 	double answer;
 	stack<double> numbersStack;
 	stack<char> operatorsStack;
+	bool isUnaryOperator(char op);
+	bool isBinaryOperator(char op);
+	void properNumberOfArgs(string expn);
 	string removeSpaces(string str);
 	int precedenceOfOperator(char op);
 	string reduceExpression(string str);
