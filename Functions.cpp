@@ -249,8 +249,10 @@ double inflixParser::processedAnswer(string expn)
 			{
 				while (operatorsStack.top() != '(')
 				{
+					/*
 					n2 = numbersStack.top();
 					numbersStack.pop();
+
 					n1 = numbersStack.top();
 					numbersStack.pop();
 					try {
@@ -261,7 +263,50 @@ double inflixParser::processedAnswer(string expn)
 						cerr << msg << endl;
 					}
 					operatorsStack.pop();
+					cout << "TEMP2 = " << temp2 << endl;
 					numbersStack.push(temp2);
+					*/
+					switch (operatorsStack.top())
+					{
+					case '!':
+					case PLUS:
+					case MINUS:
+					case NEGATIVE:
+						n1 = numbersStack.top();
+						numbersStack.pop();
+						temp2 = calculate(n1, operatorsStack.top());
+						operatorsStack.pop();
+						numbersStack.push(temp2);
+						break;
+					case '^':
+					case '*':
+					case '/':
+					case '%':
+					case '+':
+					case '-':
+					case '>':
+					case GREATEREQUAL:
+					case '<':
+					case LESSEQUAL:
+					case EQUAL:
+					case NOTEQUAL:
+					case LOGICALAND:
+					case LOGICALOR:
+						n2 = numbersStack.top();
+						numbersStack.pop();
+						n1 = numbersStack.top();
+						numbersStack.pop();
+						try {
+							temp2 = calculate(n1, operatorsStack.top(), n2);
+						}
+						catch (const char* msg) {
+							error = true;
+							cerr << msg << endl;
+						}
+						operatorsStack.pop();
+						numbersStack.push(temp2);
+						break;
+					}
 				}
 				operatorsStack.pop();
 			}
@@ -410,7 +455,7 @@ void inflixParser::properNumberOfArgs(string expn)
             it_next = it;
             --it_prev;
             ++it_next;
-            if ((!isdigit(*it_prev)) || (!isdigit(*it_next)))
+            if (((!isdigit(*it_prev)) || (!isdigit(*it_next))) && !((&(*it_prev))[0] == ')'))
             {
                 error = true;
                 errorMsg = "Binary operator with improper arguments @ char " + to_string(count);
