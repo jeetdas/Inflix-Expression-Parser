@@ -21,17 +21,18 @@ bool error = false;
 
 void isBalanced(string expn)
 {
-    int open, close, openPlace = -1, closePlace = -1;
+    int open = 0, close = 0, openPlace = -1, closePlace = -1, count = 1;
+    string errorMsg;
     
     string::iterator stringItr;
-    for (stringItr = expn.begin()+1; stringItr < expn.end() -1 ; ++stringItr)
+    for (stringItr = expn.begin(); stringItr < expn.end(); ++stringItr)
     {
         if (*stringItr == '(')
         {
             open++;
             if (openPlace == -1)
             {
-                openPlace = *stringItr;
+                openPlace = count;
             }
         }
         else if(*stringItr == ')')
@@ -39,23 +40,23 @@ void isBalanced(string expn)
             close++;
             if (closePlace == -1)
             {
-                closePlace = *stringItr;
+                closePlace = count;
             }
         }
-        if (open != close)
+        ++count;
+    }
+    if (open != close)
+    {
+        error = true;
+        if (open > close)
         {
-            if (open > close)
-            {
-                error = true;
-                throw "Mismatch parenthese in the expression @char"<<openPlace;
-            }
-            else
-            {
-                error = true;
-                throw "Mismatch parenthese in the expression @char"<<closePlace;
-            }
-
-        } 
+            errorMsg = "Mismatch parenthese in the expression @char " + to_string(openPlace);
+        }
+        else
+        {
+            errorMsg = "Mismatch parenthese in the expression @char " + to_string(closePlace);
+        }
+        throw errorMsg.c_str();
     }
 }
 
@@ -387,6 +388,7 @@ int main()
     try
     {
         expn = removeSpaces(expn);
+        isBalanced(expn);
     } catch (const char* eMsg)
     {
         error = true;
