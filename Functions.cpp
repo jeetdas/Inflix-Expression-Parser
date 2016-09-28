@@ -165,7 +165,6 @@ string inflixParser::reduceExpression(string str)
 		else
 		{
 			temp = *(++it);
-			//cout << "T = " << temp << endl;
 			--it;
 			if (!(isdigit(temp)))
 			{
@@ -249,23 +248,6 @@ double inflixParser::processedAnswer(string expn)
 			{
 				while (operatorsStack.top() != '(')
 				{
-					/*
-					n2 = numbersStack.top();
-					numbersStack.pop();
-
-					n1 = numbersStack.top();
-					numbersStack.pop();
-					try {
-						temp2 = calculate(n1, operatorsStack.top(), n2);
-					}
-					catch (const char* msg) {
-						error = true;
-						cerr << msg << endl;
-					}
-					operatorsStack.pop();
-					cout << "TEMP2 = " << temp2 << endl;
-					numbersStack.push(temp2);
-					*/
 					switch (operatorsStack.top())
 					{
 					case '!':
